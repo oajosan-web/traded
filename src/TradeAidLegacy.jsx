@@ -10,7 +10,8 @@ const T = {
   ink: "#1A1A1A", grey: "#6B6B6B", greyLight: "#8B8B8B",
   gold: "#B8860B", goldSoft: "#F2E8B0", goldDeep: "#8B6023",
   burgundy: "#8B3A3A", burgundySoft: "#F2E4E0",
-  green: "#B8860B", greenSoft: "#F2E8B0",
+  emerald: "#1D2E28", emeraldSoft: "#DCE5E1", emeraldMid: "#2F4A40",
+  green: "#1D2E28", greenSoft: "#DCE5E1",
 };
 const sans = "'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 const serif = "'Cormorant Garamond', Georgia, serif";
@@ -438,10 +439,13 @@ const Card = ({ children, style, className, onClick }) => (
 );
 const Btn = ({ children, kind = "primary", style, ...rest }) => {
   const kinds = {
-    primary: { background: T.ink, color: T.bg }, gold: { background: T.gold, color: T.ink },
-    ghost: { background: "transparent", color: T.ink, border: `1px solid ${T.line}` }, burgundy: { background: T.burgundy, color: T.bg },
+    primary: { background: T.emerald, color: T.bg, border: `1px solid ${T.emerald}` },
+    ink: { background: T.ink, color: T.bg, border: `1px solid ${T.ink}` },
+    gold: { background: T.gold, color: T.ink, border: `1px solid ${T.gold}` },
+    ghost: { background: "transparent", color: T.ink, border: `1px solid ${T.line}` },
+    burgundy: { background: T.burgundy, color: T.bg, border: `1px solid ${T.burgundy}` },
   };
-  return <button {...rest} style={{ border: "none", borderRadius: 8, padding: "12px 24px", fontWeight: 700, fontSize: 13, cursor: "pointer", letterSpacing: "0.12em", textTransform: "uppercase", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, ...kinds[kind], ...style }}>{children}</button>;
+  return <button {...rest} style={{ borderRadius: 4, padding: "14px 28px", fontWeight: 500, fontSize: 11, cursor: "pointer", letterSpacing: "0.15em", textTransform: "uppercase", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, transition: "letter-spacing .2s ease, opacity .2s ease", ...kinds[kind], ...style }}>{children}</button>;
 };
 const Eyebrow = ({ children, color = T.burgundy }) => <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color, marginBottom: 8, fontFamily: sans }}>{children}</div>;
 const H1 = ({ children, style }) => <h1 style={{ fontFamily: serif, fontSize: 36, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.05, margin: 0, color: T.ink, ...style }}>{children}</h1>;
@@ -520,17 +524,19 @@ function Logo({ size = 36 }) {
   );
 }
 
-function Welcome({ onNext }) {
+function Welcome({ onNext, embedded }) {
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", flexDirection: "column" }}>
-      <div style={{ padding: "24px 28px", display: "flex", alignItems: "center", gap: 11 }}>
-        <Logo /><span style={{ fontWeight: 600, fontSize: 18, letterSpacing: "-0.04em" }}>TradeAid</span>
-      </div>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 24px 60px", textAlign: "center" }}>
-        <div className="rise" style={{ maxWidth: 580 }}>
+    <div style={{ minHeight: embedded ? "calc(100vh - 68px)" : "100vh", background: T.bg, display: "flex", flexDirection: "column" }}>
+      {!embedded && (
+        <div style={{ padding: "24px 28px", display: "flex", alignItems: "center", gap: 11 }}>
+          <Logo /><span style={{ fontWeight: 600, fontSize: 18, letterSpacing: "-0.04em" }}>TradeAid</span>
+        </div>
+      )}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "60px 24px 80px", textAlign: "center" }}>
+        <div className="rise" style={{ maxWidth: 720 }}>
           <Eyebrow>Learn first. Trade later.</Eyebrow>
-          <h1 style={{ fontSize: "clamp(36px, 6.5vw, 58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.06, margin: "0 0 18px" }}>
-            The market is a<br />skill, not a <span style={{ background: T.gold, padding: "0 10px", borderRadius: 8 }}>slot machine</span>.
+          <h1 style={{ fontFamily: serif, fontSize: "clamp(44px, 7vw, 76px)", fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.02, margin: "0 0 24px", color: T.ink }}>
+            The market is a skill,<br />not a <em style={{ fontStyle: "italic", color: T.goldDeep, fontWeight: 400 }}>slot machine</em>.
           </h1>
           <p style={{ fontSize: 16.5, color: T.grey, lineHeight: 1.65, margin: "0 auto 30px", maxWidth: 460 }}>
             A research-grounded curriculum on investing and trading best practices — peer-reviewed evidence, a coached simulator, and a professional toolkit. No real money at risk.
@@ -558,38 +564,41 @@ function AuthScreen({ onAuth }) {
     { id: "google", label: "Continue with Google", bg: T.card, fg: T.ink, border: true, glyph: <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.2c-.3 1.4-1.1 2.6-2.3 3.4v2.8h3.7C21.7 18.6 23 15.7 23 12.3z"/><path fill="#34A853" d="M12 23c3.1 0 5.7-1 7.6-2.8l-3.7-2.8c-1 .7-2.4 1.1-3.9 1.1-3 0-5.5-2-6.4-4.7H1.8v3C3.7 20.5 7.6 23 12 23z"/><path fill="#FBBC05" d="M5.6 13.8c-.2-.7-.4-1.4-.4-2.2s.1-1.5.4-2.2v-3H1.8C1 8.1.5 10 .5 11.6s.5 3.5 1.3 5.2l3.8-3z"/><path fill="#EA4335" d="M12 4.7c1.7 0 3.2.6 4.4 1.7L19.7 3C17.7 1.2 15.1 0 12 0 7.6 0 3.7 2.5 1.8 6.4l3.8 3C6.5 6.7 9 4.7 12 4.7z"/></svg> },
     { id: "facebook", label: "Continue with Facebook", bg: T.ink, fg: T.bg, glyph: <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4h-3V12h3V9.4c0-3 1.8-4.7 4.6-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.3l-.5 3.5h-2.8v8.4A12 12 0 0 0 24 12z"/></svg> },
   ];
+  const fieldS = { width: "100%", padding: "16px 18px", borderRadius: 4, border: `1px solid ${T.line}`, fontSize: 14, fontFamily: sans, fontWeight: 300, background: T.bg, color: T.ink };
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      <div className="rise" style={{ width: "100%", maxWidth: 420 }}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}><Logo size={50} /></div>
-        <H1 style={{ textAlign: "center", fontSize: 32 }}>Welcome to TradeAid</H1>
-        <p style={{ textAlign: "center", color: T.grey, fontSize: 14, margin: "8px 0 26px" }}>One profile. Your curriculum, progress, and tools — saved to you.</p>
+    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 24px" }}>
+      <div className="rise" style={{ width: "100%", maxWidth: 440 }}>
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
+          <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.burgundy, marginBottom: 18 }}>Sign in</div>
+          <h1 style={{ fontFamily: serif, fontSize: 44, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.05, margin: 0, color: T.ink }}>Welcome to TradeAid.</h1>
+          <p style={{ color: T.grey, fontSize: 15, lineHeight: 1.7, fontWeight: 300, margin: "18px auto 0", maxWidth: 380 }}>One profile. Your curriculum, progress, and tools — saved to you.</p>
+        </div>
         {!mode ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {providers.map((p) => (
               <button key={p.id} onClick={() => onAuth({ name: "", provider: p.id })}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, padding: "13px", borderRadius: 999, fontWeight: 700, fontSize: 14.5, cursor: "pointer", background: p.bg, color: p.fg, border: p.border ? `1.5px solid ${T.line}` : "none" }}>
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, padding: "14px", borderRadius: 4, fontWeight: 500, fontSize: 13, cursor: "pointer", background: p.bg, color: p.fg, border: p.border ? `1px solid ${T.line}` : `1px solid ${p.bg}`, fontFamily: sans }}>
                 {p.glyph}{p.label}
               </button>
             ))}
-            <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "5px 0" }}>
-              <div style={{ flex: 1, height: 1, background: T.line }} /><span style={{ fontSize: 12, color: T.greyLight }}>or</span><div style={{ flex: 1, height: 1, background: T.line }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "12px 0 6px" }}>
+              <div style={{ flex: 1, height: 1, background: T.line }} /><span style={{ fontSize: 10, color: T.greyLight, letterSpacing: "0.18em", textTransform: "uppercase" }}>or</span><div style={{ flex: 1, height: 1, background: T.line }} />
             </div>
-            <Btn kind="ghost" onClick={() => setMode("email")}>Continue with email</Btn>
-            <button onClick={() => onAuth({ name: "", provider: "guest" })} style={{ background: "none", border: "none", color: T.grey, fontSize: 13, cursor: "pointer", marginTop: 6, textDecoration: "underline", textUnderlineOffset: 3 }}>
+            <Btn kind="ghost" onClick={() => setMode("email")} style={{ width: "100%" }}>Continue with email</Btn>
+            <button onClick={() => onAuth({ name: "", provider: "guest" })} style={{ background: "none", border: "none", color: T.grey, fontSize: 12, cursor: "pointer", marginTop: 14, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>
               Just exploring? Continue as guest
             </button>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-            <input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} style={{ ...inputS, fontFamily: sans, background: T.card, padding: "14px 16px", borderRadius: 8 }} />
-            <input placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} style={{ ...inputS, fontFamily: sans, background: T.card, padding: "14px 16px", borderRadius: 8 }} />
-            <Btn onClick={() => onAuth({ name: name.trim(), provider: "email" })} style={{ marginTop: 4 }}>Continue</Btn>
-            <button onClick={() => setMode(null)} style={{ background: "none", border: "none", color: T.grey, fontSize: 13, cursor: "pointer" }}>Back</button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} style={fieldS} />
+            <input placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} style={fieldS} />
+            <Btn onClick={() => onAuth({ name: name.trim(), provider: "email" })} style={{ marginTop: 6, width: "100%" }}>Continue</Btn>
+            <button onClick={() => setMode(null)} style={{ background: "none", border: "none", color: T.grey, fontSize: 12, cursor: "pointer", marginTop: 6, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>← Back</button>
           </div>
         )}
-        <p style={{ textAlign: "center", fontSize: 11.5, color: T.greyLight, marginTop: 22, lineHeight: 1.6 }}>
-          Demo experience — no real account is created and nothing leaves this page. In a real app, never enter passwords anywhere you don't fully trust.
+        <p style={{ textAlign: "center", fontSize: 12, color: T.greyLight, marginTop: 32, lineHeight: 1.7, fontWeight: 300 }}>
+          Demo experience — no real account is created and nothing leaves this page.
         </p>
       </div>
     </div>
@@ -598,25 +607,30 @@ function AuthScreen({ onAuth }) {
 
 function PickScreen({ eyebrow, title, sub, items, onPick, step }) {
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      <div className="rise" style={{ width: "100%", maxWidth: 480 }}>
-        <div style={{ display: "flex", gap: 6, marginBottom: 26 }}>
-          {[1, 2, 3].map((s) => <div key={s} style={{ flex: 1, height: 4, borderRadius: 99, background: s <= step ? T.gold : T.line }} />)}
+    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 24px" }}>
+      <div className="rise" style={{ width: "100%", maxWidth: 520 }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 36 }}>
+          {[1, 2, 3].map((s) => <div key={s} style={{ flex: 1, height: 2, background: s <= step ? T.emerald : T.line, transition: "background .3s ease" }} />)}
         </div>
-        <Eyebrow>{eyebrow}</Eyebrow>
-        <H1 style={{ fontSize: 29 }}>{title}</H1>
-        <p style={{ color: T.grey, fontSize: 14.5, margin: "10px 0 24px", lineHeight: 1.6 }}>{sub}</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
+          <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.burgundy, marginBottom: 18 }}>{eyebrow}</div>
+          <h1 style={{ fontFamily: serif, fontSize: 40, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.1, margin: 0, color: T.ink }}>{title}</h1>
+          <p style={{ color: T.grey, fontSize: 15, fontWeight: 300, margin: "18px auto 0", lineHeight: 1.7, maxWidth: 420 }}>{sub}</p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {items.map((it) => (
             <button key={it.id} onClick={() => onPick(it.id)} className="hoverlift"
-              style={{ display: "flex", alignItems: "center", gap: 16, textAlign: "left", background: T.card, border: `1.5px solid ${T.line}`, borderRadius: 8, padding: "17px 20px", cursor: "pointer" }}>
-              <span style={{ width: 42, height: 42, borderRadius: 8, background: T.goldSoft, display: "flex", alignItems: "center", justifyContent: "center", color: T.ink }}>
-                <Icon name={it.icon} size={21} />
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = T.emerald; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = T.line; }}
+              style={{ display: "flex", alignItems: "center", gap: 18, textAlign: "left", background: T.bg, border: `1px solid ${T.line}`, borderRadius: 4, padding: "20px 22px", cursor: "pointer", fontFamily: sans, transition: "border-color .2s ease" }}>
+              <span style={{ width: 44, height: 44, borderRadius: 4, background: T.emeraldSoft, display: "flex", alignItems: "center", justifyContent: "center", color: T.emerald, flexShrink: 0 }}>
+                <Icon name={it.icon} size={20} color={T.emerald} />
               </span>
-              <span>
-                <span style={{ display: "block", fontWeight: 800, fontSize: 15.5, color: T.ink }}>{it.title}</span>
-                <span style={{ display: "block", fontSize: 13, color: T.grey, marginTop: 2 }}>{it.desc}</span>
+              <span style={{ flex: 1 }}>
+                <span style={{ display: "block", fontFamily: serif, fontWeight: 400, fontSize: 20, color: T.ink, lineHeight: 1.2 }}>{it.title}</span>
+                <span style={{ display: "block", fontSize: 13.5, color: T.grey, marginTop: 4, fontWeight: 300, lineHeight: 1.55 }}>{it.desc}</span>
               </span>
+              <Icon name="arrowR" size={16} color={T.greyLight} />
             </button>
           ))}
         </div>
@@ -628,16 +642,18 @@ function PickScreen({ eyebrow, title, sub, items, onPick, step }) {
 function NameScreen({ onDone, initial }) {
   const [name, setName] = useState(initial || "");
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      <div className="rise" style={{ width: "100%", maxWidth: 420 }}>
-        <div style={{ display: "flex", gap: 6, marginBottom: 26 }}>
-          {[1, 2, 3].map((s) => <div key={s} style={{ flex: 1, height: 4, borderRadius: 99, background: s <= 1 ? T.gold : T.line }} />)}
+    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 24px" }}>
+      <div className="rise" style={{ width: "100%", maxWidth: 440 }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 36 }}>
+          {[1, 2, 3].map((s) => <div key={s} style={{ flex: 1, height: 2, background: s <= 1 ? T.emerald : T.line }} />)}
         </div>
-        <Eyebrow>Your profile</Eyebrow>
-        <H1 style={{ fontSize: 29 }}>What should we call you?</H1>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.burgundy, marginBottom: 18 }}>Your profile</div>
+          <h1 style={{ fontFamily: serif, fontSize: 40, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.1, margin: 0, color: T.ink }}>What should we call you?</h1>
+        </div>
         <input autoFocus placeholder="First name" value={name} onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && onDone(name.trim() || "Trader")}
-          style={{ ...inputS, fontFamily: sans, background: T.card, padding: "14px 16px", borderRadius: 8, fontSize: 17, margin: "22px 0 14px" }} />
+          style={{ width: "100%", padding: "18px 20px", borderRadius: 4, border: `1px solid ${T.line}`, fontSize: 16, fontFamily: sans, fontWeight: 300, background: T.bg, color: T.ink, marginBottom: 16 }} />
         <Btn onClick={() => onDone(name.trim() || "Trader")} style={{ width: "100%" }}>Continue</Btn>
       </div>
     </div>
@@ -645,14 +661,14 @@ function NameScreen({ onDone, initial }) {
 }
 
 /* ============================== HOME ============================== */
-function ProgressRing({ pct, size = 56 }) {
-  const r = (size - 8) / 2, circ = 2 * Math.PI * r;
+function ProgressRing({ pct, size = 60 }) {
+  const r = (size - 6) / 2, circ = 2 * Math.PI * r;
   return (
     <svg width={size} height={size}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={T.line} strokeWidth="6" />
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={T.gold} strokeWidth="6" strokeLinecap="round"
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={T.line} strokeWidth="3" />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={T.emerald} strokeWidth="3" strokeLinecap="round"
         strokeDasharray={circ} strokeDashoffset={circ * (1 - pct / 100)} transform={`rotate(-90 ${size / 2} ${size / 2})`} style={{ transition: "stroke-dashoffset .6s ease" }} />
-      <text x="50%" y="55%" textAnchor="middle" fontSize="12.5" fontWeight="800" fill={T.ink} fontFamily={sans}>{pct}%</text>
+      <text x="50%" y="55%" textAnchor="middle" fontSize="13" fontWeight="500" fill={T.ink} fontFamily={sans}>{pct}%</text>
     </svg>
   );
 }
@@ -669,66 +685,70 @@ function Home({ user, completed, xp, streak, go }) {
   const hint = hints[user.style];
   return (
     <div>
-      <div className="rise">
+      <div className="rise" style={{ marginBottom: 36 }}>
         <Eyebrow>{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</Eyebrow>
-        <H1>Welcome back{user.name ? `, ${user.name}` : ""}</H1>
-        <p style={{ color: T.grey, fontSize: 15, margin: "8px 0 22px" }}>Small reps, every session. That is the entire secret.</p>
+        <h1 style={{ fontFamily: serif, fontSize: 56, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.02, margin: "4px 0 12px", color: T.ink }}>Welcome back{user.name ? <>, <em style={{ fontStyle: "italic", color: T.goldDeep, fontWeight: 400 }}>{user.name}</em></> : ""}.</h1>
+        <p style={{ color: T.grey, fontSize: 15, fontWeight: 300, lineHeight: 1.7, margin: 0, maxWidth: 520 }}>Small reps, every session. That is the entire secret.</p>
       </div>
 
-      <div className="grid2 rise2" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 14 }}>
-        <Card style={{ background: T.ink, border: "none", color: T.bg, position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", right: -30, top: -30, width: 160, height: 160, borderRadius: "50%", background: T.gold, opacity: 0.15 }} />
-          <Eyebrow color={T.gold}>Up next · {track.label} module</Eyebrow>
-          <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.3, margin: "2px 0 6px" }}>
-            {next ? next.title : "Module complete — sit the examination"}
+      <div className="grid2 rise2" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16 }}>
+        <div style={{ background: T.emerald, color: T.bg, position: "relative", overflow: "hidden", borderRadius: 4, padding: 32 }}>
+          <div style={{ position: "absolute", right: -60, top: -60, width: 220, height: 220, borderRadius: "50%", background: T.emeraldMid, opacity: 0.6 }} />
+          <div style={{ position: "relative" }}>
+            <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.goldSoft, marginBottom: 16 }}>Up next · {track.label} module</div>
+            <div style={{ fontFamily: serif, fontSize: 28, fontWeight: 300, letterSpacing: "-0.01em", lineHeight: 1.2, margin: "0 0 10px" }}>
+              {next ? next.title : "Module complete — sit the examination"}
+            </div>
+            <p style={{ fontSize: 13, color: "rgba(250,250,248,.65)", margin: "0 0 26px", fontWeight: 300, letterSpacing: "0.04em" }}>
+              {next ? `${next.minutes} min · lecture ${track.lessons.indexOf(next) + 1} of ${track.lessons.length}` : "Then advance to the next module."}
+            </p>
+            <button onClick={() => go(next ? "learn" : "quiz")} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "transparent", color: T.bg, border: `1px solid rgba(250,250,248,.5)`, borderRadius: 4, padding: "12px 22px", fontFamily: sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer" }}>
+              {next ? "Continue" : "Take the quiz"} <Icon name="arrowR" size={14} color={T.bg} />
+            </button>
           </div>
-          <p style={{ fontSize: 13.5, color: "rgba(253,251,245,.7)", margin: "0 0 18px" }}>
-            {next ? `${next.minutes} min · lecture ${track.lessons.indexOf(next) + 1} of ${track.lessons.length}` : "Then advance to the next module."}
-          </p>
-          <Btn kind="butter" onClick={() => go(next ? "learn" : "quiz")}>{next ? "Continue" : "Take the quiz"} <Icon name="arrowR" size={15} /></Btn>
-        </Card>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <Card style={{ display: "flex", gap: 18, alignItems: "center", padding: 18 }}>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 4, padding: 22, display: "flex", gap: 18, alignItems: "center" }}>
             <ProgressRing pct={pct} />
             <div>
-              <div style={{ fontWeight: 800, fontSize: 15 }}>{track.label} module</div>
-              <div style={{ fontSize: 13, color: T.grey }}>{pct}% complete</div>
+              <div style={{ fontFamily: serif, fontWeight: 400, fontSize: 18, color: T.ink }}>{track.label} module</div>
+              <div style={{ fontSize: 12, color: T.grey, letterSpacing: "0.05em", marginTop: 2 }}>{pct}% complete</div>
             </div>
-          </Card>
-          <div style={{ display: "flex", gap: 14 }}>
-            <Card style={{ flex: 1, padding: 16, textAlign: "center" }}>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 4, color: T.goldDeep }}><Icon name="bolt" size={16} /></div>
-              <div style={{ fontFamily: mono, fontSize: 21, fontWeight: 600 }}>{xp}</div>
-              <div style={{ fontSize: 11, color: T.grey, fontWeight: 800, letterSpacing: ".07em", textTransform: "uppercase" }}>XP earned</div>
-            </Card>
-            <Card style={{ flex: 1, padding: 16, textAlign: "center", background: streak > 1 ? T.goldSoft : T.card, borderColor: streak > 1 ? T.gold : T.line }}>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 4, color: T.burgundy }}><Icon name="flame" size={16} /></div>
-              <div style={{ fontFamily: mono, fontSize: 21, fontWeight: 600 }}>{streak}</div>
-              <div style={{ fontSize: 11, color: T.grey, fontWeight: 800, letterSpacing: ".07em", textTransform: "uppercase" }}>Streak</div>
-            </Card>
+          </div>
+          <div style={{ display: "flex", gap: 16 }}>
+            <div style={{ flex: 1, background: T.bg, border: `1px solid ${T.line}`, borderRadius: 4, padding: "20px 16px", textAlign: "center" }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, color: T.emerald }}><Icon name="bolt" size={15} color={T.emerald} /></div>
+              <div style={{ fontFamily: serif, fontSize: 32, fontWeight: 300, color: T.ink, lineHeight: 1 }}>{xp}</div>
+              <div style={{ fontSize: 10, color: T.grey, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 8 }}>XP earned</div>
+            </div>
+            <div style={{ flex: 1, background: streak > 1 ? T.emeraldSoft : T.bg, border: `1px solid ${streak > 1 ? T.emerald : T.line}`, borderRadius: 4, padding: "20px 16px", textAlign: "center" }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, color: T.burgundy }}><Icon name="flame" size={15} color={T.burgundy} /></div>
+              <div style={{ fontFamily: serif, fontSize: 32, fontWeight: 300, color: T.ink, lineHeight: 1 }}>{streak}</div>
+              <div style={{ fontSize: 10, color: T.grey, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 8 }}>Streak</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <Card className="rise3 hoverlift" onClick={() => go(hint.tab)} style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 18, cursor: "pointer" }}>
-        <div style={{ width: 46, height: 46, borderRadius: 8, background: T.burgundySoft, display: "flex", alignItems: "center", justifyContent: "center", color: T.burgundy, flexShrink: 0 }}>
-          <Icon name={hint.icon} size={21} />
+      <button className="rise3 hoverlift" onClick={() => go(hint.tab)} style={{ width: "100%", marginTop: 16, display: "flex", alignItems: "center", gap: 20, cursor: "pointer", background: T.bg, border: `1px solid ${T.line}`, borderRadius: 4, padding: "22px 24px", textAlign: "left", fontFamily: sans }}>
+        <div style={{ width: 48, height: 48, borderRadius: 4, background: T.emeraldSoft, display: "flex", alignItems: "center", justifyContent: "center", color: T.emerald, flexShrink: 0 }}>
+          <Icon name={hint.icon} size={20} color={T.emerald} />
         </div>
         <div style={{ flex: 1 }}>
-          <div style={{ fontWeight: 800, fontSize: 15 }}>For your learning style: {hint.label}</div>
-          <div style={{ fontSize: 13.5, color: T.grey, marginTop: 2 }}>{hint.desc}</div>
+          <div style={{ fontFamily: serif, fontWeight: 400, fontSize: 20, color: T.ink, lineHeight: 1.2 }}>For your learning style: {hint.label}</div>
+          <div style={{ fontSize: 13.5, color: T.grey, marginTop: 4, fontWeight: 300, lineHeight: 1.55 }}>{hint.desc}</div>
         </div>
-        <span style={{ color: T.burgundy }}><Icon name="arrowR" size={18} /></span>
-      </Card>
+        <span style={{ color: T.emerald }}><Icon name="arrowR" size={16} color={T.emerald} /></span>
+      </button>
 
-      <div className="rise3" style={{ marginTop: 24 }}>
-        <SectionLabel>The non-negotiables</SectionLabel>
-        <div className="grid2" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-          {[["1%", "Maximum account risk per trade. Survival precedes profit."], ["2:1", "Minimum reward-to-risk before an entry is considered."], ["0", "Trades permitted outside the written plan."]].map(([n, d]) => (
-            <Card key={n} style={{ padding: 18 }}>
-              <div style={{ fontFamily: mono, fontSize: 26, fontWeight: 600, color: T.burgundy }}>{n}</div>
-              <div style={{ fontSize: 13, color: T.grey, lineHeight: 1.55, marginTop: 4 }}>{d}</div>
-            </Card>
+      <div className="rise3" style={{ marginTop: 40 }}>
+        <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.grey, marginBottom: 18 }}>The non-negotiables</div>
+        <div className="grid2" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+          {[["1%", "Maximum account risk per trade. Survival precedes profit.", T.emerald], ["2:1", "Minimum reward-to-risk before an entry is considered.", T.goldDeep], ["0", "Trades permitted outside the written plan.", T.burgundy]].map(([n, d, color]) => (
+            <div key={n} style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 4, padding: "24px 22px" }}>
+              <div style={{ fontFamily: serif, fontSize: 44, fontWeight: 300, color, lineHeight: 1, letterSpacing: "-0.02em" }}>{n}</div>
+              <div style={{ fontSize: 13, color: T.grey, lineHeight: 1.65, marginTop: 14, fontWeight: 300 }}>{d}</div>
+            </div>
           ))}
         </div>
       </div>
@@ -1610,7 +1630,7 @@ function Profile({ user, setUser, xp, completed, stats, activity, onSignOut }) {
 }
 
 /* ============================== APP SHELL ============================== */
-export default function TradeAid() {
+export default function TradeAid({ embedded = false } = {}) {
   const [stage, setStage] = useState("welcome");
   const [user, setUser] = useState({ name: "", provider: "", level: "beginner", style: "reading" });
   const [tab, setTab] = useState("home");
@@ -1634,7 +1654,7 @@ export default function TradeAid() {
   const onPattern = (ok) => setStats((s) => ({ ...s, patC: s.patC + (ok ? 1 : 0), patT: s.patT + 1 }));
   const onQuizDone = (score, total) => { setStats((s) => ({ ...s, quizC: s.quizC + score, quizT: s.quizT + total })); logAct(`Finished a quiz: ${score}/${total}`, "check"); };
 
-  if (stage === "welcome") return <><GlobalStyle /><Welcome onNext={() => setStage("auth")} /></>;
+  if (stage === "welcome") return <><GlobalStyle /><Welcome embedded={embedded} onNext={() => setStage("auth")} /></>;
   if (stage === "auth") return <><GlobalStyle /><AuthScreen onAuth={(u) => { setUser({ ...user, ...u }); setStage(u.name ? "level" : "name"); }} /></>;
   if (stage === "name") return <><GlobalStyle /><NameScreen initial={user.name} onDone={(name) => { setUser({ ...user, name }); setStage("level"); }} /></>;
   if (stage === "level") return <><GlobalStyle /><PickScreen step={2} eyebrow="Personalize" title="How experienced are you?" sub="Your curriculum opens at the right depth. Switch modules anytime." items={LEVELS} onPick={(id) => { setUser({ ...user, level: id }); setStage("style"); }} /></>;
@@ -1645,20 +1665,20 @@ export default function TradeAid() {
   return (
     <div style={{ minHeight: "100vh", background: T.bg, color: T.ink, fontFamily: sans }}>
       <GlobalStyle />
-      <header style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(253,251,245,.93)", backdropFilter: "blur(10px)", borderBottom: `1px solid ${T.line}`, padding: "12px 22px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => setTab("home")}>
+      <header style={{ position: "sticky", top: embedded ? 68 : 0, zIndex: 10, background: "rgba(253,251,245,.93)", backdropFilter: "blur(10px)", borderBottom: `1px solid ${T.line}`, padding: "12px 22px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", visibility: embedded ? "hidden" : "visible", width: embedded ? 0 : "auto" }} onClick={() => setTab("home")}>
           <Logo size={31} /><span style={{ fontWeight: 800, fontSize: 16.5, letterSpacing: "-0.02em" }}>TradeAid</span>
         </div>
-        <nav style={{ display: "flex", gap: 2 }}>
+        <nav style={{ display: "flex", gap: 4 }}>
           {NAV.map(([id, label, icon]) => (
             <button key={id} onClick={() => setTab(id)}
-              style={{ display: "flex", alignItems: "center", gap: 7, border: "none", background: tab === id ? T.goldSoft : "transparent", color: tab === id ? T.ink : T.grey, borderRadius: 999, padding: "9px 14px", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>
-              <Icon name={icon} size={16} /><span className="navlabel">{label}</span>
+              style={{ display: "flex", alignItems: "center", gap: 8, border: "none", background: "transparent", color: tab === id ? T.emerald : T.grey, borderRadius: 0, padding: "10px 14px", fontSize: 11, fontWeight: 500, letterSpacing: "0.14em", textTransform: "uppercase", cursor: "pointer", borderBottom: `1px solid ${tab === id ? T.emerald : "transparent"}`, fontFamily: sans, transition: "color .15s ease, border-color .15s ease" }}>
+              <Icon name={icon} size={14} color={tab === id ? T.emerald : T.grey} /><span className="navlabel">{label}</span>
             </button>
           ))}
         </nav>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: mono, fontSize: 12.5, fontWeight: 600, background: T.goldSoft, border: `1.5px solid ${T.gold}`, borderRadius: 999, padding: "6px 13px", whiteSpace: "nowrap", color: T.ink }}>
-          <Icon name="bolt" size={13} color={T.goldDeep} />{xp} XP
+        <div style={{ display: "flex", alignItems: "center", gap: 7, fontFamily: sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.14em", textTransform: "uppercase", background: T.emeraldSoft, border: `1px solid ${T.emerald}`, borderRadius: 4, padding: "8px 14px", whiteSpace: "nowrap", color: T.emerald }}>
+          <Icon name="bolt" size={12} color={T.emerald} />{xp} XP
         </div>
       </header>
 

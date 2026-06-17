@@ -7,7 +7,11 @@ export const T = {
   text: "#6B6B6B",
   textSoft: "#8B8B8B",
   gold: "#B8860B",
+  goldDeep: "#8B6023",
   burgundy: "#8B3A3A",
+  emerald: "#1D2E28",
+  emeraldSoft: "#DCE5E1",
+  emeraldMid: "#2F4A40",
   black: "#0D0D0D",
 };
 

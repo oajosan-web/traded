@@ -9,7 +9,7 @@ const fonts = {
 
 const SectionHeading = ({ eyebrow, title, description }) => (
   <section style={{ padding: "100px 0 40px", maxWidth: 920, margin: "0 auto" }}>
-    <div style={{ color: T.text, textTransform: "uppercase", letterSpacing: "0.18em", fontSize: 11, marginBottom: 18, fontFamily: fonts.sans, fontWeight: 500 }}>{eyebrow}</div>
+    <div style={{ color: T.burgundy, textTransform: "uppercase", letterSpacing: "0.18em", fontSize: 11, marginBottom: 18, fontFamily: fonts.sans, fontWeight: 500 }}>{eyebrow}</div>
     <h2 style={{ fontFamily: fonts.serif, fontSize: 48, lineHeight: 1.05, margin: 0, color: T.black, fontWeight: 300 }}>{title}</h2>
     {description ? <p style={{ color: T.text, maxWidth: 680, fontSize: 16, lineHeight: 1.75, marginTop: 24, fontFamily: fonts.sans, fontWeight: 300 }}>{description}</p> : null}
   </section>
@@ -17,7 +17,7 @@ const SectionHeading = ({ eyebrow, title, description }) => (
 
 const Card = ({ title, description, accent }) => (
   <article style={{ background: T.card, borderRadius: 4, padding: "32px", border: `1px solid ${T.line}`, minWidth: 260, flex: "1 1 260px", margin: "12px" }}>
-    <div style={{ color: T.text, fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>{accent}</div>
+    <div style={{ color: T.burgundy, fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>{accent}</div>
     <h3 style={{ fontFamily: fonts.serif, fontSize: 32, margin: "0 0 14px", color: T.black, fontWeight: 300 }}>{title}</h3>
     <p style={{ color: T.text, lineHeight: 1.75, margin: 0, fontFamily: fonts.sans, fontWeight: 300 }}>{description}</p>
   </article>
@@ -25,7 +25,7 @@ const Card = ({ title, description, accent }) => (
 
 const ModuleCard = ({ label, headline, description, outcomes }) => (
   <article style={{ background: T.surface, borderRadius: 4, padding: "32px", border: `1px solid ${T.line}`, flex: "1 1 320px", margin: "12px" }}>
-    <div style={{ color: T.text, fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>{label}</div>
+    <div style={{ color: T.burgundy, fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>{label}</div>
     <h3 style={{ fontFamily: fonts.serif, fontSize: 32, margin: "0 0 18px", color: T.black, fontWeight: 300 }}>{headline}</h3>
     <p style={{ color: T.text, lineHeight: 1.75, margin: 0, marginBottom: 20, fontFamily: fonts.sans, fontWeight: 300 }}>{description}</p>
     <ul style={{ listStyle: "none", padding: 0, margin: 0, color: T.text }}>
@@ -51,13 +51,13 @@ const Hero = ({ onOpenExperience, scrollTo }) => (
     <div className="hero-inner fade-in">
       <div className="hero-copy">
         <div className="section-label">TRADEAID</div>
-        <h1 className="hero-title">Trade with clarity.</h1>
+        <h1 className="hero-title">Trade with <em style={{ fontStyle: "italic", color: "#8B6023", fontWeight: 400 }}>clarity</em>.</h1>
         <p className="hero-text">Real-time signals. Zero noise.</p>
         <div className="hero-actions">
           <button className="btn-outline" onClick={() => scrollTo("philosophy")}>START TRACKING</button>
         </div>
       </div>
-      <div className="hero-chart surface-card fade-in">
+      <div className="hero-chart fade-in">
         <div className="hero-chart-labels">
           <span>Live pulse</span>
           <span>USD</span>
@@ -144,11 +144,11 @@ const App = () => {
   if (active === "App") {
     return (
       <div style={{ minHeight: "100vh", background: T.bg, color: T.black, fontFamily: fonts.sans }}>
-        <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} />
-        <div style={{ padding: "24px", maxWidth: 1180, margin: "0 auto" }}>
-          <button onClick={() => setActive("home")} style={{ border: `1px solid ${T.line}`, background: T.surface, color: T.black, borderRadius: 4, padding: "12px 22px", cursor: "pointer", fontFamily: fonts.sans, fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase" }}>← Return to site</button>
-        </div>
-        <TradeAid />
+        <header style={{ position: "sticky", top: 0, zIndex: 40, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 28px", minHeight: 68, background: T.bg, borderBottom: `1px solid ${T.line}` }}>
+          <div style={{ fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.black }}>TradeAid</div>
+          <button onClick={() => setActive("home")} style={{ border: `1px solid ${T.line}`, background: "transparent", color: T.black, borderRadius: 4, padding: "10px 18px", cursor: "pointer", fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.14em", textTransform: "uppercase" }}>← Return to site</button>
+        </header>
+        <TradeAid embedded />
       </div>
     );
   }
@@ -160,7 +160,7 @@ const App = () => {
         <Hero onOpenExperience={() => setActive("App")} scrollTo={scrollTo} />
         <section id="philosophy" style={{ padding: "0 24px 0", background: T.bg }}>
           <div className="section-label">Thinking</div>
-          <h2 className="section-title">A refined logic for market decisions.</h2>
+          <h2 className="section-title">A refined logic for <em style={{ fontStyle: "italic", color: T.goldDeep, fontWeight: 400 }}>market decisions</em>.</h2>
           <p className="section-copy">TradeAid is built to favor clarity and process over signal-chasing and noise.</p>
           <div className="grid-3" style={{ marginTop: 38 }}>
             {[
@@ -189,7 +189,7 @@ const App = () => {
         <section id="signals" style={{ padding: "0 24px 80px" }}>
           <SectionHeading eyebrow="Experience" title="Enter the TradeAid system." description="This is where the curriculum and tools come together in a single flow." />
           <div style={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
-            <button onClick={() => setActive("App")} style={{ border: "1px solid #B8860B", background: T.gold, color: T.black, borderRadius: 4, padding: "18px 32px", fontFamily: fonts.sans, fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer" }}>Open the experience</button>
+            <button onClick={() => setActive("App")} style={{ border: `1px solid ${T.emerald}`, background: T.emerald, color: T.bg, borderRadius: 4, padding: "18px 36px", fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer" }}>Open the experience →</button>
           </div>
         </section>
       </main>
