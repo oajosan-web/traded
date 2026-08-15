@@ -556,9 +556,13 @@ function Welcome({ onNext, embedded }) {
   );
 }
 
-function AuthScreen({ onAuth }) {
-  const [mode, setMode] = useState(null);
+function AuthScreen({ onAuth, intent }) {
+  const [mode, setMode] = useState(intent === "signup" ? "email" : null);
   const [name, setName] = useState(""); const [email, setEmail] = useState("");
+  const [touched, setTouched] = useState({ name: false, email: false });
+  const nameOk = name.trim().length >= 2;
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const canContinue = nameOk && emailOk;
   const providers = [
     { id: "apple", label: "Continue with Apple", bg: T.ink, fg: T.bg, glyph: <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.9c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.9-1.6 0-3.1 1-4 2.4-1.7 2.9-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-1-2.4-3.7zM14 5.6c.7-.8 1.1-1.9 1-3-1 0-2.1.6-2.8 1.4-.6.7-1.2 1.9-1 3 1 .1 2.1-.6 2.8-1.4z"/></svg> },
     { id: "google", label: "Continue with Google", bg: T.card, fg: T.ink, border: true, glyph: <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.2c-.3 1.4-1.1 2.6-2.3 3.4v2.8h3.7C21.7 18.6 23 15.7 23 12.3z"/><path fill="#34A853" d="M12 23c3.1 0 5.7-1 7.6-2.8l-3.7-2.8c-1 .7-2.4 1.1-3.9 1.1-3 0-5.5-2-6.4-4.7H1.8v3C3.7 20.5 7.6 23 12 23z"/><path fill="#FBBC05" d="M5.6 13.8c-.2-.7-.4-1.4-.4-2.2s.1-1.5.4-2.2v-3H1.8C1 8.1.5 10 .5 11.6s.5 3.5 1.3 5.2l3.8-3z"/><path fill="#EA4335" d="M12 4.7c1.7 0 3.2.6 4.4 1.7L19.7 3C17.7 1.2 15.1 0 12 0 7.6 0 3.7 2.5 1.8 6.4l3.8 3C6.5 6.7 9 4.7 12 4.7z"/></svg> },
@@ -569,9 +573,9 @@ function AuthScreen({ onAuth }) {
     <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 24px" }}>
       <div className="rise" style={{ width: "100%", maxWidth: 440 }}>
         <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.burgundy, marginBottom: 18 }}>Sign in</div>
-          <h1 style={{ fontFamily: serif, fontSize: 44, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.05, margin: 0, color: T.ink }}>Welcome to TradeAid.</h1>
-          <p style={{ color: T.grey, fontSize: 15, lineHeight: 1.7, fontWeight: 300, margin: "18px auto 0", maxWidth: 380 }}>One profile. Your curriculum, progress, and tools — saved to you.</p>
+          <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.burgundy, marginBottom: 18 }}>{intent === "signup" ? "Create an account" : intent === "signin" ? "Sign in" : "Welcome"}</div>
+          <h1 style={{ fontFamily: serif, fontSize: 44, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.05, margin: 0, color: T.ink }}>{intent === "signup" ? <>Start your <em style={{ fontStyle: "italic", color: T.goldDeep, fontWeight: 400 }}>practice</em>.</> : intent === "signin" ? "Welcome back." : "Welcome to TradeAid."}</h1>
+          <p style={{ color: T.grey, fontSize: 15, lineHeight: 1.7, fontWeight: 300, margin: "18px auto 0", maxWidth: 380 }}>{intent === "signup" ? "Create your profile — name and email required." : "One profile. Your curriculum, progress, and tools — saved to you."}</p>
         </div>
         {!mode ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -591,10 +595,21 @@ function AuthScreen({ onAuth }) {
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} style={fieldS} />
-            <input placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} style={fieldS} />
-            <Btn onClick={() => onAuth({ name: name.trim(), provider: "email" })} style={{ marginTop: 6, width: "100%" }}>Continue</Btn>
-            <button onClick={() => setMode(null)} style={{ background: "none", border: "none", color: T.grey, fontSize: 12, cursor: "pointer", marginTop: 6, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>← Back</button>
+            <div>
+              <input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} onBlur={() => setTouched((t) => ({ ...t, name: true }))}
+                style={{ ...fieldS, borderColor: touched.name && !nameOk ? T.burgundy : T.line }} />
+              {touched.name && !nameOk && <div style={{ color: T.burgundy, fontSize: 12, marginTop: 6, fontWeight: 300 }}>Enter your name (2 characters minimum).</div>}
+            </div>
+            <div>
+              <input placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+                style={{ ...fieldS, borderColor: touched.email && !emailOk ? T.burgundy : T.line }} />
+              {touched.email && !emailOk && <div style={{ color: T.burgundy, fontSize: 12, marginTop: 6, fontWeight: 300 }}>Enter a valid email address.</div>}
+            </div>
+            <Btn onClick={() => { if (canContinue) onAuth({ name: name.trim(), email: email.trim(), provider: "email" }); else setTouched({ name: true, email: true }); }}
+              style={{ marginTop: 6, width: "100%", opacity: canContinue ? 1 : 0.5, cursor: canContinue ? "pointer" : "not-allowed" }}>Continue</Btn>
+            {intent !== "signup" && (
+              <button onClick={() => setMode(null)} style={{ background: "none", border: "none", color: T.grey, fontSize: 12, cursor: "pointer", marginTop: 6, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>← Back</button>
+            )}
           </div>
         )}
         <p style={{ textAlign: "center", fontSize: 12, color: T.greyLight, marginTop: 32, lineHeight: 1.7, fontWeight: 300 }}>
@@ -641,6 +656,9 @@ function PickScreen({ eyebrow, title, sub, items, onPick, step }) {
 
 function NameScreen({ onDone, initial }) {
   const [name, setName] = useState(initial || "");
+  const [touched, setTouched] = useState(false);
+  const ok = name.trim().length >= 2;
+  const submit = () => { if (ok) onDone(name.trim()); else setTouched(true); };
   return (
     <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 24px" }}>
       <div className="rise" style={{ width: "100%", maxWidth: 440 }}>
@@ -651,10 +669,11 @@ function NameScreen({ onDone, initial }) {
           <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.burgundy, marginBottom: 18 }}>Your profile</div>
           <h1 style={{ fontFamily: serif, fontSize: 40, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.1, margin: 0, color: T.ink }}>What should we call you?</h1>
         </div>
-        <input autoFocus placeholder="First name" value={name} onChange={(e) => setName(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && onDone(name.trim() || "Trader")}
-          style={{ width: "100%", padding: "18px 20px", borderRadius: 4, border: `1px solid ${T.line}`, fontSize: 16, fontFamily: sans, fontWeight: 300, background: T.bg, color: T.ink, marginBottom: 16 }} />
-        <Btn onClick={() => onDone(name.trim() || "Trader")} style={{ width: "100%" }}>Continue</Btn>
+        <input autoFocus placeholder="First name" value={name} onChange={(e) => setName(e.target.value)} onBlur={() => setTouched(true)}
+          onKeyDown={(e) => e.key === "Enter" && submit()}
+          style={{ width: "100%", padding: "18px 20px", borderRadius: 4, border: `1px solid ${touched && !ok ? T.burgundy : T.line}`, fontSize: 16, fontFamily: sans, fontWeight: 300, background: T.bg, color: T.ink, marginBottom: touched && !ok ? 6 : 16 }} />
+        {touched && !ok && <div style={{ color: T.burgundy, fontSize: 12, marginBottom: 12, fontWeight: 300 }}>Please enter your name to continue.</div>}
+        <Btn onClick={submit} style={{ width: "100%", opacity: ok ? 1 : 0.5, cursor: ok ? "pointer" : "not-allowed" }}>Continue</Btn>
       </div>
     </div>
   );
@@ -683,12 +702,19 @@ function Home({ user, completed, xp, streak, go }) {
     hands: { label: "Coached simulator", desc: "Hands-on: take a paper trade and let the coach grade your process.", tab: "practice", icon: "hand" },
   };
   const hint = hints[user.style];
+
+  const styleHero = {
+    visual: { eyebrow: "You learn by seeing", copy: "We'll open your session with charts, patterns, and diagrams — the language your brain reads fastest." },
+    reading: { eyebrow: "You learn by reading", copy: "Every lesson is anchored to peer-reviewed evidence — start with the paper, then the practice." },
+    hands: { eyebrow: "You learn by doing", copy: "Skip the theory queue — the simulator and coached drills are your fastest path to skill." },
+  };
+  const heroCopy = styleHero[user.style] || styleHero.reading;
   return (
     <div>
       <div className="rise" style={{ marginBottom: 36 }}>
-        <Eyebrow>{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</Eyebrow>
+        <Eyebrow>{heroCopy.eyebrow} · {new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</Eyebrow>
         <h1 style={{ fontFamily: serif, fontSize: 56, fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.02, margin: "4px 0 12px", color: T.ink }}>Welcome back{user.name ? <>, <em style={{ fontStyle: "italic", color: T.goldDeep, fontWeight: 400 }}>{user.name}</em></> : ""}.</h1>
-        <p style={{ color: T.grey, fontSize: 15, fontWeight: 300, lineHeight: 1.7, margin: 0, maxWidth: 520 }}>Small reps, every session. That is the entire secret.</p>
+        <p style={{ color: T.grey, fontSize: 16, fontWeight: 300, lineHeight: 1.7, margin: 0, maxWidth: 620 }}>{heroCopy.copy}</p>
       </div>
 
       <div className="grid2 rise2" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16 }}>
@@ -1630,8 +1656,8 @@ function Profile({ user, setUser, xp, completed, stats, activity, onSignOut }) {
 }
 
 /* ============================== APP SHELL ============================== */
-export default function TradeAid({ embedded = false } = {}) {
-  const [stage, setStage] = useState("welcome");
+export default function TradeAid({ embedded = false, entryStage = "welcome", authIntent = null } = {}) {
+  const [stage, setStage] = useState(entryStage);
   const [user, setUser] = useState({ name: "", provider: "", level: "beginner", style: "reading" });
   const [tab, setTab] = useState("home");
   const [completed, setCompleted] = useState([]);
@@ -1655,7 +1681,7 @@ export default function TradeAid({ embedded = false } = {}) {
   const onQuizDone = (score, total) => { setStats((s) => ({ ...s, quizC: s.quizC + score, quizT: s.quizT + total })); logAct(`Finished a quiz: ${score}/${total}`, "check"); };
 
   if (stage === "welcome") return <><GlobalStyle /><Welcome embedded={embedded} onNext={() => setStage("auth")} /></>;
-  if (stage === "auth") return <><GlobalStyle /><AuthScreen onAuth={(u) => { setUser({ ...user, ...u }); setStage(u.name ? "level" : "name"); }} /></>;
+  if (stage === "auth") return <><GlobalStyle /><AuthScreen intent={authIntent} onAuth={(u) => { setUser({ ...user, ...u }); setStage(u.name ? "level" : "name"); }} /></>;
   if (stage === "name") return <><GlobalStyle /><NameScreen initial={user.name} onDone={(name) => { setUser({ ...user, name }); setStage("level"); }} /></>;
   if (stage === "level") return <><GlobalStyle /><PickScreen step={2} eyebrow="Personalize" title="How experienced are you?" sub="Your curriculum opens at the right depth. Switch modules anytime." items={LEVELS} onPick={(id) => { setUser({ ...user, level: id }); setStage("style"); }} /></>;
   if (stage === "style") return <><GlobalStyle /><PickScreen step={3} eyebrow="Personalize" title="How do you learn best?" sub="TradeAid adapts: visual learners see diagrams inside lessons; doers get routed to the simulator." items={STYLES} onPick={(id) => { setUser({ ...user, style: id }); setStage("app"); }} /></>;

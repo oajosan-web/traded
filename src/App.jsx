@@ -71,7 +71,7 @@ const Hero = ({ onOpenExperience, scrollTo }) => (
   </section>
 );
 
-const Nav = ({ active, setActive, scrollTo, scrolled, goPage }) => (
+const Nav = ({ active, setActive, scrollTo, scrolled, goPage, openAuth }) => (
   <header className={`navbar ${scrolled ? 'solid' : 'transparent'}`}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
       <button onClick={() => goPage("home")} style={{ background: "transparent", border: "none", cursor: "pointer", padding: 0, fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.black }}>TradeAid</button>
@@ -85,9 +85,9 @@ const Nav = ({ active, setActive, scrollTo, scrolled, goPage }) => (
         );
       })}
     </nav>
-    <div className="nav-right">
-      <div className="avatar" aria-hidden="true"></div>
-      <button className="nav-link">Sign In</button>
+    <div className="nav-right" style={{ display: "flex", alignItems: "center", gap: 14 }}>
+      <button onClick={() => openAuth("signin")} className="nav-link">Sign In</button>
+      <button onClick={() => openAuth("signup")} style={{ background: T.emerald, color: T.bg, border: `1px solid ${T.emerald}`, borderRadius: 4, padding: "10px 20px", fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.14em", textTransform: "uppercase", cursor: "pointer" }}>Sign Up</button>
     </div>
   </header>
 );
@@ -129,6 +129,7 @@ const PageFooter = () => (
 const App = () => {
   const [active, setActive] = useState("home");
   const [scrolled, setScrolled] = useState(false);
+  const [authIntent, setAuthIntent] = useState(null); // "signin" | "signup" | null
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
@@ -151,6 +152,12 @@ const App = () => {
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
+  const openAuth = (intent) => {
+    setAuthIntent(intent);
+    setActive("App");
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
   if (active === "App") {
     return (
       <div style={{ minHeight: "100vh", background: T.bg, color: T.black, fontFamily: fonts.sans }}>
@@ -158,7 +165,7 @@ const App = () => {
           <button onClick={() => goPage("home")} style={{ background: "transparent", border: "none", cursor: "pointer", padding: 0, fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.black }}>TradeAid</button>
           <button onClick={() => setActive("home")} style={{ border: `1px solid ${T.line}`, background: "transparent", color: T.black, borderRadius: 4, padding: "10px 18px", cursor: "pointer", fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.14em", textTransform: "uppercase" }}>← Return to site</button>
         </header>
-        <TradeAid embedded />
+        <TradeAid embedded entryStage={authIntent ? "auth" : "welcome"} authIntent={authIntent} />
       </div>
     );
   }
@@ -166,7 +173,7 @@ const App = () => {
   if (active === "markets") {
     return (
       <div style={{ minHeight: "100vh", background: T.bg, color: T.black, fontFamily: fonts.sans }}>
-        <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} goPage={goPage} />
+        <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} goPage={goPage} openAuth={openAuth} />
         <Markets />
         <PageFooter />
       </div>
@@ -175,7 +182,7 @@ const App = () => {
 
   return (
     <div style={{ minHeight: "100vh", background: T.bg, color: T.black, fontFamily: fonts.sans }}>
-      <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} goPage={goPage} />
+      <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} goPage={goPage} openAuth={openAuth} />
       <main>
         <Hero onOpenExperience={() => setActive("App")} scrollTo={scrollTo} />
         <section id="philosophy" style={{ padding: "0 24px 0", background: T.bg }}>
