@@ -557,7 +557,7 @@ function Welcome({ onNext, embedded }) {
 }
 
 function AuthScreen({ onAuth, intent }) {
-  const [mode, setMode] = useState(intent === "signup" ? "email" : null);
+  const [mode, setMode] = useState(null);
   const [name, setName] = useState(""); const [email, setEmail] = useState("");
   const [touched, setTouched] = useState({ name: false, email: false });
   const nameOk = name.trim().length >= 2;
@@ -607,9 +607,7 @@ function AuthScreen({ onAuth, intent }) {
             </div>
             <Btn onClick={() => { if (canContinue) onAuth({ name: name.trim(), email: email.trim(), provider: "email" }); else setTouched({ name: true, email: true }); }}
               style={{ marginTop: 6, width: "100%", opacity: canContinue ? 1 : 0.5, cursor: canContinue ? "pointer" : "not-allowed" }}>Continue</Btn>
-            {intent !== "signup" && (
-              <button onClick={() => setMode(null)} style={{ background: "none", border: "none", color: T.grey, fontSize: 12, cursor: "pointer", marginTop: 6, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>← Back</button>
-            )}
+            <button onClick={() => setMode(null)} style={{ background: "none", border: "none", color: T.grey, fontSize: 12, cursor: "pointer", marginTop: 6, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>← Back</button>
           </div>
         )}
         <p style={{ textAlign: "center", fontSize: 12, color: T.greyLight, marginTop: 32, lineHeight: 1.7, fontWeight: 300 }}>
