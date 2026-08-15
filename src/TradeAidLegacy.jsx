@@ -560,9 +560,28 @@ function AuthScreen({ onAuth, intent }) {
   const [mode, setMode] = useState(null);
   const [name, setName] = useState(""); const [email, setEmail] = useState("");
   const [touched, setTouched] = useState({ name: false, email: false });
+  const [sending, setSending] = useState(false);
   const nameOk = name.trim().length >= 2;
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const canContinue = nameOk && emailOk;
+
+  const submitEmail = async () => {
+    if (!canContinue) { setTouched({ name: true, email: true }); return; }
+    setSending(true);
+    // Sign-in intent: fire the security notice now. Sign-up: welcome is sent later
+    // once we know the learning style (handled by the main TradeAid shell).
+    if (intent === "signin") {
+      try {
+        await fetch("/api/send-signin-notice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: name.trim(), email: email.trim() }),
+        });
+      } catch (_) { /* non-blocking */ }
+    }
+    setSending(false);
+    onAuth({ name: name.trim(), email: email.trim(), provider: "email" });
+  };
   const providers = [
     { id: "apple", label: "Continue with Apple", bg: T.ink, fg: T.bg, glyph: <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.9c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.9-1.6 0-3.1 1-4 2.4-1.7 2.9-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-1-2.4-3.7zM14 5.6c.7-.8 1.1-1.9 1-3-1 0-2.1.6-2.8 1.4-.6.7-1.2 1.9-1 3 1 .1 2.1-.6 2.8-1.4z"/></svg> },
     { id: "google", label: "Continue with Google", bg: T.card, fg: T.ink, border: true, glyph: <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.2c-.3 1.4-1.1 2.6-2.3 3.4v2.8h3.7C21.7 18.6 23 15.7 23 12.3z"/><path fill="#34A853" d="M12 23c3.1 0 5.7-1 7.6-2.8l-3.7-2.8c-1 .7-2.4 1.1-3.9 1.1-3 0-5.5-2-6.4-4.7H1.8v3C3.7 20.5 7.6 23 12 23z"/><path fill="#FBBC05" d="M5.6 13.8c-.2-.7-.4-1.4-.4-2.2s.1-1.5.4-2.2v-3H1.8C1 8.1.5 10 .5 11.6s.5 3.5 1.3 5.2l3.8-3z"/><path fill="#EA4335" d="M12 4.7c1.7 0 3.2.6 4.4 1.7L19.7 3C17.7 1.2 15.1 0 12 0 7.6 0 3.7 2.5 1.8 6.4l3.8 3C6.5 6.7 9 4.7 12 4.7z"/></svg> },
@@ -605,8 +624,8 @@ function AuthScreen({ onAuth, intent }) {
                 style={{ ...fieldS, borderColor: touched.email && !emailOk ? T.burgundy : T.line }} />
               {touched.email && !emailOk && <div style={{ color: T.burgundy, fontSize: 12, marginTop: 6, fontWeight: 300 }}>Enter a valid email address.</div>}
             </div>
-            <Btn onClick={() => { if (canContinue) onAuth({ name: name.trim(), email: email.trim(), provider: "email" }); else setTouched({ name: true, email: true }); }}
-              style={{ marginTop: 6, width: "100%", opacity: canContinue ? 1 : 0.5, cursor: canContinue ? "pointer" : "not-allowed" }}>Continue</Btn>
+            <Btn onClick={submitEmail} disabled={sending}
+              style={{ marginTop: 6, width: "100%", opacity: canContinue && !sending ? 1 : 0.5, cursor: canContinue && !sending ? "pointer" : "not-allowed" }}>{sending ? "Sending…" : "Continue"}</Btn>
             <button onClick={() => setMode(null)} style={{ background: "none", border: "none", color: T.grey, fontSize: 12, cursor: "pointer", marginTop: 6, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>← Back</button>
           </div>
         )}
@@ -1682,7 +1701,20 @@ export default function TradeAid({ embedded = false, entryStage = "welcome", aut
   if (stage === "auth") return <><GlobalStyle /><AuthScreen intent={authIntent} onAuth={(u) => { setUser({ ...user, ...u }); setStage(u.name ? "level" : "name"); }} /></>;
   if (stage === "name") return <><GlobalStyle /><NameScreen initial={user.name} onDone={(name) => { setUser({ ...user, name }); setStage("level"); }} /></>;
   if (stage === "level") return <><GlobalStyle /><PickScreen step={2} eyebrow="Personalize" title="How experienced are you?" sub="Your curriculum opens at the right depth. Switch modules anytime." items={LEVELS} onPick={(id) => { setUser({ ...user, level: id }); setStage("style"); }} /></>;
-  if (stage === "style") return <><GlobalStyle /><PickScreen step={3} eyebrow="Personalize" title="How do you learn best?" sub="TradeAid adapts: visual learners see diagrams inside lessons; doers get routed to the simulator." items={STYLES} onPick={(id) => { setUser({ ...user, style: id }); setStage("app"); }} /></>;
+  if (stage === "style") return <><GlobalStyle /><PickScreen step={3} eyebrow="Personalize" title="How do you learn best?" sub="TradeAid adapts: visual learners see diagrams inside lessons; doers get routed to the simulator." items={STYLES} onPick={(id) => {
+    const nextUser = { ...user, style: id };
+    setUser(nextUser);
+    // Fire the personalized welcome email once we know their learning style.
+    // Only for accounts with an email on file and signup intent (not signin).
+    if (nextUser.email && authIntent !== "signin") {
+      fetch("/api/send-welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nextUser.name, email: nextUser.email, style: id }),
+      }).catch(() => {});
+    }
+    setStage("app");
+  }} /></>;
 
   const NAV = [["home", "Home", "home"], ["learn", "Learn", "book"], ["practice", "Practice", "chart"], ["quiz", "Quiz", "check"], ["tools", "Tools", "calc"], ["profile", "Profile", "user"]];
 
