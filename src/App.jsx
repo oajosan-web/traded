@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TradeAid from "./TradeAid";
+import Markets from "./Markets";
 import { T, SITE, FEATURES, MODULES, LIBRARY } from "./data";
 
 const fonts = {
@@ -70,15 +71,19 @@ const Hero = ({ onOpenExperience, scrollTo }) => (
   </section>
 );
 
-const Nav = ({ active, setActive, scrollTo, scrolled }) => (
+const Nav = ({ active, setActive, scrollTo, scrolled, goPage }) => (
   <header className={`navbar ${scrolled ? 'solid' : 'transparent'}`}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-      <div style={{ fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.black }}>TradeAid</div>
+      <button onClick={() => goPage("home")} style={{ background: "transparent", border: "none", cursor: "pointer", padding: 0, fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.black }}>TradeAid</button>
     </div>
     <nav className="nav-links">
-      {[ 'Markets', 'Watchlist', 'Portfolio', 'Signals', 'Settings' ].map((label) => (
-        <button key={label} onClick={() => scrollTo(label.toLowerCase())} className={`nav-link ${active === label.toLowerCase() ? 'active' : ''}`}>{label}</button>
-      ))}
+      {[ 'Markets', 'Watchlist', 'Portfolio', 'Signals', 'Settings' ].map((label) => {
+        const id = label.toLowerCase();
+        const isPage = id === "markets";
+        return (
+          <button key={label} onClick={() => isPage ? goPage(id) : scrollTo(id)} className={`nav-link ${active === id ? 'active' : ''}`}>{label}</button>
+        );
+      })}
     </nav>
     <div className="nav-right">
       <div className="avatar" aria-hidden="true"></div>
@@ -141,11 +146,16 @@ const App = () => {
     }
   };
 
+  const goPage = (id) => {
+    setActive(id);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
   if (active === "App") {
     return (
       <div style={{ minHeight: "100vh", background: T.bg, color: T.black, fontFamily: fonts.sans }}>
         <header style={{ position: "sticky", top: 0, zIndex: 40, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 28px", minHeight: 68, background: T.bg, borderBottom: `1px solid ${T.line}` }}>
-          <div style={{ fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.black }}>TradeAid</div>
+          <button onClick={() => goPage("home")} style={{ background: "transparent", border: "none", cursor: "pointer", padding: 0, fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.black }}>TradeAid</button>
           <button onClick={() => setActive("home")} style={{ border: `1px solid ${T.line}`, background: "transparent", color: T.black, borderRadius: 4, padding: "10px 18px", cursor: "pointer", fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.14em", textTransform: "uppercase" }}>← Return to site</button>
         </header>
         <TradeAid embedded />
@@ -153,9 +163,19 @@ const App = () => {
     );
   }
 
+  if (active === "markets") {
+    return (
+      <div style={{ minHeight: "100vh", background: T.bg, color: T.black, fontFamily: fonts.sans }}>
+        <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} goPage={goPage} />
+        <Markets />
+        <PageFooter />
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: T.bg, color: T.black, fontFamily: fonts.sans }}>
-      <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} />
+      <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} goPage={goPage} />
       <main>
         <Hero onOpenExperience={() => setActive("App")} scrollTo={scrollTo} />
         <section id="philosophy" style={{ padding: "0 24px 0", background: T.bg }}>
