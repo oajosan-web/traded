@@ -3,7 +3,7 @@
 :root {
   color-scheme: light;
   color: #1A1A1A;
-  background: #FAFAF8;
+  background: #F4EBDC;
   font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 16px;
   line-height: 1.75;
@@ -18,12 +18,12 @@ html, body, #root {
   min-height: 100%;
   margin: 0;
   padding: 0;
-  background: #FAFAF8;
+  background: #F4EBDC;
 }
 
 body {
   color: #1A1A1A;
-  background: #FAFAF8;
+  background: #F4EBDC;
 }
 
 button,
@@ -65,8 +65,8 @@ img {
 }
 
 .navbar.solid {
-  background: #FAFAF8;
-  border-bottom: 1px solid #E8E4DF;
+  background: #F4EBDC;
+  border-bottom: 1px solid #DFD4BE;
   backdrop-filter: blur(10px);
 }
 
@@ -113,7 +113,7 @@ img {
 .hero-section {
   min-height: 100vh;
   padding: 120px 24px;
-  background: #FAFAF8;
+  background: #F4EBDC;
   display: grid;
   place-items: center;
 }
@@ -185,7 +185,7 @@ img {
 
 .btn-solid {
   border: 1px solid #1D2E28;
-  color: #FAFAF8;
+  color: #F4EBDC;
   background: #1D2E28;
 }
 
@@ -196,7 +196,7 @@ img {
   border: 1px solid #1D2E28;
   padding: 28px;
   border-radius: 4px;
-  color: #FAFAF8;
+  color: #F4EBDC;
 }
 
 .hero-chart .hero-chart-labels {
@@ -204,7 +204,7 @@ img {
 }
 
 .hero-chart .chart-path {
-  stroke: #FAFAF8 !important;
+  stroke: #F4EBDC !important;
 }
 
 .hero-chart-labels {
@@ -254,8 +254,8 @@ img {
 }
 
 .surface-card {
-  background: #F2EFE9;
-  border: 1px solid #E8E4DF;
+  background: #EDE2CE;
+  border: 1px solid #DFD4BE;
   border-radius: 4px;
   padding: 32px;
 }
@@ -298,4 +298,65 @@ img {
 
 @keyframes drawLine {
   to { stroke-dashoffset: 0; }
+}
+
+/* ===== Agrumea-inspired additions: rotating wordmark + tilted hero ===== */
+
+.rotating-wordmark {
+  animation: tradeaid-spin 48s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes tradeaid-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 460px;
+}
+
+.hero-stage-card {
+  position: absolute;
+  background: #ECE0C8;
+  border: 1px solid #DFD4BE;
+  border-radius: 6px;
+  padding: 22px;
+  box-shadow: 0 24px 56px -20px rgba(80, 50, 20, 0.18),
+              0 8px 20px -8px rgba(80, 50, 20, 0.08);
+  width: 240px;
+  font-family: 'DM Sans', sans-serif;
+  transition: transform 300ms ease;
+}
+
+.hero-stage-card:hover { transform: translateY(-4px) rotate(0deg); }
+
+.hero-stage-card.card-a {
+  top: 20px; left: 10px;
+  transform: rotate(-6deg);
+  background: #1D2E28;
+  color: #F4EBDC;
+  border-color: #1D2E28;
+}
+
+.hero-stage-card.card-b {
+  top: 140px; right: 10px;
+  transform: rotate(5deg);
+}
+
+.hero-stage-card.card-c {
+  bottom: 20px; left: 80px;
+  transform: rotate(-2deg);
+  background: #C96E42;
+  color: #F4EBDC;
+  border-color: #C96E42;
+}
+
+@media (max-width: 900px) {
+  .hero-stage { min-height: 420px; margin-top: 24px; }
+  .hero-stage-card { width: 200px; }
 }

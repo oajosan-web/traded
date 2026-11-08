@@ -6,12 +6,13 @@ import React, { useState, useEffect, useRef } from "react";
    ============================================================ */
 
 const T = {
-  bg: "#FAFAF8", bgAlt: "#F2EFE9", card: "#F7F4EE", line: "#E8E4DF",
-  ink: "#1A1A1A", grey: "#6B6B6B", greyLight: "#8B8B8B",
+  bg: "#F4EBDC", bgAlt: "#EDE2CE", card: "#ECE0C8", line: "#DFD4BE",
+  ink: "#1A1A1A", grey: "#6B5F4E", greyLight: "#8E8369",
   gold: "#B8860B", goldSoft: "#F2E8B0", goldDeep: "#8B6023",
-  burgundy: "#8B3A3A", burgundySoft: "#F2E4E0",
-  emerald: "#1D2E28", emeraldSoft: "#DCE5E1", emeraldMid: "#2F4A40",
-  green: "#1D2E28", greenSoft: "#DCE5E1",
+  burgundy: "#7A2E2E", burgundySoft: "#E8D5CF",
+  terracotta: "#C96E42", terracottaSoft: "#F0D8C6",
+  emerald: "#1D2E28", emeraldSoft: "#D5DCD1", emeraldMid: "#2F4A40",
+  green: "#1D2E28", greenSoft: "#D5DCD1",
 };
 const sans = "'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 const serif = "'Cormorant Garamond', Georgia, serif";

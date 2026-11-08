@@ -47,25 +47,53 @@ const QuoteBar = ({ label, text }) => (
   </div>
 );
 
+const RotatingWordmark = ({ size = 440 }) => {
+  const r = size / 2 - 20;
+  const cx = size / 2;
+  const cy = size / 2;
+  const d = `M ${cx},${cy} m -${r},0 a ${r},${r} 0 1,1 ${r * 2},0 a ${r},${r} 0 1,1 -${r * 2},0`;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rotating-wordmark" style={{ display: "block" }}>
+      <defs>
+        <path id="tradeaid-circle" d={d} fill="none" />
+      </defs>
+      <text fill={T.burgundy} fontFamily={fonts.serif} fontSize={size * 0.065} fontWeight="400" letterSpacing="0.22em">
+        <textPath href="#tradeaid-circle" startOffset="0%">
+          TRADEAID · LEARN FIRST · TRADE LATER · THE MARKET IS A SKILL ·
+        </textPath>
+      </text>
+    </svg>
+  );
+};
+
 const Hero = ({ onOpenExperience, scrollTo }) => (
   <section className="hero-section">
     <div className="hero-inner fade-in">
       <div className="hero-copy">
-        <div className="section-label">TRADEAID</div>
+        <div className="section-label">TRADEAID · EST. 2026</div>
         <h1 className="hero-title">Trade with <em style={{ fontStyle: "italic", color: "#8B6023", fontWeight: 400 }}>clarity</em>.</h1>
-        <p className="hero-text">Real-time signals. Zero noise.</p>
+        <p className="hero-text">A quiet place to learn the market — before you trade it.</p>
         <div className="hero-actions">
-          <button className="btn-outline" onClick={() => scrollTo("philosophy")}>START TRACKING</button>
+          <button className="btn-outline" onClick={() => scrollTo("philosophy")}>START READING</button>
         </div>
       </div>
-      <div className="hero-chart fade-in">
-        <div className="hero-chart-labels">
-          <span>Live pulse</span>
-          <span>USD</span>
+      <div className="hero-stage fade-in">
+        <RotatingWordmark size={440} />
+        <div className="hero-stage-card card-a">
+          <div style={{ fontSize: 10, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,235,220,0.7)", marginBottom: 10 }}>Lecture 03</div>
+          <div style={{ fontFamily: fonts.serif, fontSize: 22, fontWeight: 400, lineHeight: 1.25 }}>Position sizing is a <em style={{ fontStyle: "italic", color: "#E8B55F" }}>mathematical</em> discipline.</div>
+          <div style={{ fontFamily: fonts.sans, fontSize: 11, color: "rgba(244,235,220,0.65)", marginTop: 14, letterSpacing: "0.05em" }}>6 min · intermediate</div>
         </div>
-        <svg className="chart-svg" viewBox="0 0 360 200" fill="none" preserveAspectRatio="none">
-          <path className="chart-path" d="M10 170 C80 130 130 150 180 110 C230 70 290 90 350 40" stroke="#1A1A1A" strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
+        <div className="hero-stage-card card-b">
+          <div style={{ fontSize: 10, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: T.burgundy, marginBottom: 10 }}>Paper · 1952</div>
+          <div style={{ fontFamily: fonts.serif, fontSize: 20, fontWeight: 400, color: T.ink, lineHeight: 1.25 }}>Portfolio Selection</div>
+          <div style={{ fontFamily: fonts.sans, fontSize: 12, color: T.text, marginTop: 10, lineHeight: 1.55, fontWeight: 300 }}>H. Markowitz — the founding paper of modern portfolio theory.</div>
+        </div>
+        <div className="hero-stage-card card-c">
+          <div style={{ fontSize: 10, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,235,220,0.75)", marginBottom: 8 }}>Non-negotiable</div>
+          <div style={{ fontFamily: fonts.serif, fontSize: 40, fontWeight: 300, lineHeight: 1, letterSpacing: "-0.02em" }}>1%</div>
+          <div style={{ fontFamily: fonts.sans, fontSize: 11, color: "rgba(244,235,220,0.78)", marginTop: 8, lineHeight: 1.5, fontWeight: 300 }}>Maximum account risk per trade.</div>
+        </div>
       </div>
     </div>
   </section>
