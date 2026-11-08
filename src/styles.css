@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=Oswald:wght@300;400;500;600;700&family=Anton&display=swap');
 
 :root {
   color-scheme: light;
@@ -132,19 +132,24 @@ img {
 }
 
 .hero-title {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: clamp(56px, 7.5vw, 92px);
-  line-height: 0.96;
-  font-weight: 500;
-  letter-spacing: -0.03em;
+  font-family: 'Oswald', 'Anton', system-ui, sans-serif;
+  font-size: clamp(72px, 10vw, 136px);
+  line-height: 0.92;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
   margin: 0;
-  max-width: 720px;
+  max-width: 820px;
   color: #141414;
 }
 
 .hero-title em {
-  font-style: normal;
+  font-family: 'Oswald', serif;
+  font-style: italic;
   font-weight: 500;
+  color: #7A5218;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
 }
 
 .hero-text {
