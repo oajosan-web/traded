@@ -8,35 +8,28 @@ const fonts = {
   serif: "'Cormorant Garamond', Georgia, serif",
 };
 
-const SectionHeading = ({ eyebrow, title, description }) => (
-  <section style={{ padding: "100px 0 40px", maxWidth: 920, margin: "0 auto" }}>
-    <div style={{ color: T.burgundy, textTransform: "uppercase", letterSpacing: "0.18em", fontSize: 11, marginBottom: 18, fontFamily: fonts.sans, fontWeight: 500 }}>{eyebrow}</div>
-    <h2 style={{ fontFamily: fonts.serif, fontSize: 48, lineHeight: 1.05, margin: 0, color: T.black, fontWeight: 300 }}>{title}</h2>
-    {description ? <p style={{ color: T.text, maxWidth: 680, fontSize: 16, lineHeight: 1.75, marginTop: 24, fontFamily: fonts.sans, fontWeight: 300 }}>{description}</p> : null}
-  </section>
+const EdHead = ({ eyebrow, title, description }) => (
+  <div className="ed-head">
+    <div className="eyebrow">{eyebrow}</div>
+    <h2>{title}</h2>
+    {description ? <p>{description}</p> : null}
+  </div>
 );
 
-const Card = ({ title, description, accent }) => (
-  <article style={{ background: T.card, borderRadius: 4, padding: "32px", border: `1px solid ${T.line}`, minWidth: 260, flex: "1 1 260px", margin: "12px" }}>
-    <div style={{ color: T.burgundy, fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>{accent}</div>
-    <h3 style={{ fontFamily: fonts.serif, fontSize: 32, margin: "0 0 14px", color: T.black, fontWeight: 300 }}>{title}</h3>
-    <p style={{ color: T.text, lineHeight: 1.75, margin: 0, fontFamily: fonts.sans, fontWeight: 300 }}>{description}</p>
+const EdCard = ({ kicker, title, description, variant }) => (
+  <article className={`ed-card ${variant || ""}`}>
+    <div className="ed-kicker">{kicker}</div>
+    <h3>{title}</h3>
+    <p>{description}</p>
   </article>
 );
 
-const ModuleCard = ({ label, headline, description, outcomes }) => (
-  <article style={{ background: T.surface, borderRadius: 4, padding: "32px", border: `1px solid ${T.line}`, flex: "1 1 320px", margin: "12px" }}>
-    <div style={{ color: T.burgundy, fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>{label}</div>
-    <h3 style={{ fontFamily: fonts.serif, fontSize: 32, margin: "0 0 18px", color: T.black, fontWeight: 300 }}>{headline}</h3>
-    <p style={{ color: T.text, lineHeight: 1.75, margin: 0, marginBottom: 20, fontFamily: fonts.sans, fontWeight: 300 }}>{description}</p>
-    <ul style={{ listStyle: "none", padding: 0, margin: 0, color: T.text }}>
-      {outcomes.map((item) => (
-        <li key={item} style={{ display: "flex", gap: 12, marginBottom: 12, alignItems: "flex-start" }}>
-          <span style={{ color: T.black, fontWeight: 300, fontSize: 16, lineHeight: 1 }}>•</span>
-          <span style={{ lineHeight: 1.75, fontFamily: fonts.sans, fontWeight: 300 }}>{item}</span>
-        </li>
-      ))}
-    </ul>
+const EdModule = ({ label, headline, description, outcomes, variant }) => (
+  <article className={`ed-module ${variant || ""}`}>
+    <div className="ed-kicker">{label}</div>
+    <h3>{headline}</h3>
+    <p>{description}</p>
+    <ul>{outcomes.map((item) => <li key={item}>{item}</li>)}</ul>
   </article>
 );
 
@@ -120,36 +113,34 @@ const Nav = ({ active, setActive, scrollTo, scrolled, goPage, openAuth }) => (
   </header>
 );
 
-const SectionGrid = ({ items }) => (
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", gap: 18, marginTop: 38 }}>
-    {items.map((item) => <Card key={item.title} {...item} />)}
-  </div>
-);
-
-const CurriculumGrid = () => (
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px,1fr))", gap: 18, marginTop: 38 }}>
-    {MODULES.map((module) => <ModuleCard key={module.id} {...module} />)}
-  </div>
-);
-
-const LibraryPreview = () => (
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px,1fr))", gap: 18, marginTop: 32 }}>
-    {LIBRARY.map((item) => (
-      <article key={item.title} style={{ background: T.card, borderRadius: 26, border: `1px solid ${T.line}`, padding: "26px" }}>
-        <div style={{ color: T.goldDeep, fontSize: 12, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 12 }}>{item.year}</div>
-        <h3 style={{ fontFamily: fonts.serif, fontSize: 20, margin: "0 0 14px", color: T.ink }}>{item.title}</h3>
-        <p style={{ color: T.grey, lineHeight: 1.8, margin: 0 }}>{item.note}</p>
-        <div style={{ marginTop: 18, color: T.greyLight, fontSize: 13 }}>{item.author}</div>
-      </article>
-    ))}
-  </div>
-);
-
 const PageFooter = () => (
-  <footer style={{ padding: "60px 24px", color: T.grey, borderTop: `1px solid ${T.line}`, background: T.bgAlt }}>
-    <div style={{ maxWidth: 920, margin: "0 auto", display: "grid", gap: 14, fontSize: 14, lineHeight: 1.8 }}>
-      <div style={{ fontFamily: fonts.serif, fontSize: 18, color: T.ink }}>TradeAid</div>
-      <div>Designed to help serious learners build market skill through structured learning, practical tools, and disciplined practice.</div>
+  <footer style={{ padding: "80px 28px 60px", color: T.text, borderTop: `1px solid ${T.line}`, background: T.bg }}>
+    <div style={{ maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 40, alignItems: "start" }}>
+      <div>
+        <div style={{ fontFamily: fonts.serif, fontSize: 24, color: T.ink, fontWeight: 400, marginBottom: 14 }}>TradeAid</div>
+        <div style={{ fontFamily: fonts.sans, fontSize: 14, lineHeight: 1.75, fontWeight: 300, color: T.text, maxWidth: 320 }}>A quiet place to learn the market — before you trade it. Research-grounded, simulation-based, no money at risk.</div>
+      </div>
+      <div>
+        <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 12, letterSpacing: "0.26em", textTransform: "uppercase", color: T.burgundy, marginBottom: 16 }}>Explore</div>
+        <div style={{ display: "grid", gap: 10, fontSize: 14, lineHeight: 1.6 }}>
+          <div>Markets</div><div>Curriculum</div><div>Library</div><div>Simulator</div>
+        </div>
+      </div>
+      <div>
+        <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 12, letterSpacing: "0.26em", textTransform: "uppercase", color: T.burgundy, marginBottom: 16 }}>About</div>
+        <div style={{ display: "grid", gap: 10, fontSize: 14, lineHeight: 1.6 }}>
+          <div>Our method</div><div>Research</div><div>Voice & tone</div><div>Contact</div>
+        </div>
+      </div>
+      <div>
+        <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 12, letterSpacing: "0.26em", textTransform: "uppercase", color: T.burgundy, marginBottom: 16 }}>Legal</div>
+        <div style={{ display: "grid", gap: 10, fontSize: 14, lineHeight: 1.6 }}>
+          <div>Terms</div><div>Privacy</div><div>Disclaimer</div>
+        </div>
+      </div>
+    </div>
+    <div style={{ maxWidth: 1280, margin: "64px auto 0", paddingTop: 24, borderTop: `1px solid ${T.line}`, fontSize: 12, color: T.textSoft, lineHeight: 1.7, fontWeight: 300 }}>
+      TradeAid is an educational demonstration. Nothing here constitutes financial, investment, or tax advice; simulated data and sign-in are illustrative. Trading involves substantial risk of loss. Consult a licensed financial professional before any investment decision.
     </div>
   </footer>
 );
@@ -213,38 +204,56 @@ const App = () => {
       <Nav active={active} setActive={setActive} scrollTo={scrollTo} scrolled={scrolled} goPage={goPage} openAuth={openAuth} />
       <main>
         <Hero onOpenExperience={() => setActive("App")} scrollTo={scrollTo} />
-        <section id="philosophy" style={{ padding: "0 24px 0", background: T.bg }}>
-          <div className="section-label">Thinking</div>
-          <h2 className="section-title">A refined logic for <em style={{ fontStyle: "italic", color: T.goldDeep, fontWeight: 400 }}>market decisions</em>.</h2>
-          <p className="section-copy">TradeAid is built to favor clarity and process over signal-chasing and noise.</p>
-          <div className="grid-3" style={{ marginTop: 38 }}>
-            {[
-              { title: "Evidence-led", description: "Rules and practices are rooted in market science and risk-aware behavior.", accent: "Method" },
-              { title: "Minimal design", description: "Every interaction is intended to feel calm, precise, and deliberate.", accent: "System" },
-              { title: "Capital first", description: "The priority is skill preservation before pursuit of returns.", accent: "Focus" },
-            ].map((item) => <Card key={item.title} {...item} />)}
+
+        <section id="philosophy" className="ed-section">
+          <EdHead
+            eyebrow="Thinking"
+            title={<>A refined logic for <em>market decisions</em>.</>}
+            description="TradeAid is built to favor clarity and process over signal-chasing and noise. Every page, every lesson, every button follows the same principle: slow enough to think."
+          />
+          <div className="ed-grid-3">
+            <EdCard kicker="Method" title={<>Evidence-<em>led</em>.</>} description="Rules and practices are rooted in market science and risk-aware behavior — not slogans, not hunches." />
+            <EdCard kicker="System" variant="dark" title={<>Minimal <em>design</em>.</>} description="Every interaction is intended to feel calm, precise, and deliberate. No dopamine farming, no flashing panels." />
+            <EdCard kicker="Focus" title={<>Capital <em>first</em>.</>} description="The priority is skill preservation before pursuit of returns. Survive the market; the rest follows." />
           </div>
         </section>
-        <section id="curriculum" style={{ padding: "0 24px 0" }}>
-          <SectionHeading eyebrow="System" title="A simple structure for serious learning." description="Three core modules center the work: foundations, discipline, and edge." />
-          <div className="grid-3">
-            {MODULES.map((module) => <ModuleCard key={module.id} {...module} />)}
+
+        <div className="ed-divider"><hr /></div>
+
+        <section id="curriculum" className="ed-section">
+          <EdHead
+            eyebrow="System"
+            title={<>A simple structure for <em>serious</em> learning.</>}
+            description="Three core modules center the work: foundations, discipline, and edge. Each module pairs lectures with hands-on practice and a short written exam."
+          />
+          <div className="ed-grid-3">
+            {MODULES.map((module, i) => (
+              <EdModule key={module.id} {...module} variant={i === 1 ? "dark" : ""} />
+            ))}
           </div>
         </section>
-        <section id="practice" style={{ padding: "0 24px 0", background: T.bg }}>
-          <SectionHeading eyebrow="Practice" title="The experience is the proof." description="Tools, simulations, and review are the way knowledge becomes skill." />
-          <div className="grid-3">
-            {[
-              { title: "Simulations", description: "Practice trades with real decision points.", accent: "Action" },
-              { title: "Review", description: "Measure choices with objective feedback.", accent: "Insight" },
-              { title: "Repeat", description: "Build consistency through disciplined process.", accent: "Habit" },
-            ].map((item) => <Card key={item.title} {...item} />)}
+
+        <div className="ed-divider"><hr /></div>
+
+        <section id="practice" className="ed-section">
+          <EdHead
+            eyebrow="Practice"
+            title={<>The <em>experience</em> is the proof.</>}
+            description="Tools, simulations, and review are the way knowledge becomes skill. You will practice more than you will read."
+          />
+          <div className="ed-grid-3">
+            <EdCard kicker="Action" title={<><em>Simulations</em>.</>} description="Take real decisions on simulated markets — wrong choices cost nothing except a lesson." />
+            <EdCard kicker="Insight" variant="wine" title={<><em>Review</em>.</>} description="Every trade is graded on process, not outcome. Good decisions can lose; bad decisions can win. Only the pattern matters." />
+            <EdCard kicker="Habit" title={<><em>Repeat</em>.</>} description="Small reps, every session. That is the entire secret." />
           </div>
         </section>
-        <section id="signals" style={{ padding: "0 24px 80px" }}>
-          <SectionHeading eyebrow="Experience" title="Enter the TradeAid system." description="This is where the curriculum and tools come together in a single flow." />
-          <div style={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
-            <button onClick={() => setActive("App")} style={{ border: `1px solid ${T.emerald}`, background: T.emerald, color: T.bg, borderRadius: 4, padding: "18px 36px", fontFamily: fonts.sans, fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer" }}>Open the experience →</button>
+
+        <section id="signals" className="ed-cta">
+          <div className="ed-cta-inner">
+            <div className="eyebrow">Experience</div>
+            <h2>Step inside the <em>system</em>.</h2>
+            <p>The curriculum, the simulator, the research library, and the toolkit — in a single, quiet flow. No cost, no credit card, no real money at risk.</p>
+            <button onClick={() => setActive("App")} className="btn-emerald">Open TradeAid →</button>
           </div>
         </section>
       </main>

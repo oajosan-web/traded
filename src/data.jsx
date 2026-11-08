@@ -43,13 +43,18 @@ export const FEATURES = [
   },
 ];
 
+import React from "react";
+
+const em = (text) => <em style={{ fontStyle: "italic", color: "#8B6023", fontWeight: 400 }}>{text}</em>;
+const emGold = (text) => <em style={{ fontStyle: "italic", color: "#D4A954", fontWeight: 400 }}>{text}</em>;
+
 export const MODULES = [
   {
     id: "beginner",
     label: "Beginner",
-    headline: "Start with market fundamentals.",
+    headline: <>Start with the <em style={{ fontStyle: "italic", color: "#8B6023", fontWeight: 400 }}>fundamentals</em>.</>,
     description:
-      "Understand what securities are, how orders work, and why risk management is the first skill every trader needs.",
+      "Understand what securities are, how orders work, and why risk management is the first skill every trader needs — before anything else.",
     outcomes: [
       "Explain the business behind every stock.",
       "Use limit and stop orders with purpose.",
@@ -59,9 +64,9 @@ export const MODULES = [
   {
     id: "intermediate",
     label: "Intermediate",
-    headline: "Build trading discipline.",
+    headline: <>Build real <em style={{ fontStyle: "italic", color: "#D4A954", fontWeight: 400 }}>discipline</em>.</>,
     description:
-      "Move from curiosity to consistent process: expectancy, trade sizing, chart literacy, and the real psychology of losses.",
+      "Move from curiosity to consistent process: expectancy, trade sizing, chart literacy, and the honest psychology of losses.",
     outcomes: [
       "Compute expectancy and risk-reward.",
       "Read price action with discipline.",
@@ -71,9 +76,9 @@ export const MODULES = [
   {
     id: "advanced",
     label: "Advanced",
-    headline: "Translate skill into edge.",
+    headline: <>Translate skill into <em style={{ fontStyle: "italic", color: "#8B6023", fontWeight: 400 }}>edge</em>.</>,
     description:
-      "Practice simulator workflows, portfolio rules, and process checks that professionals use before risking capital.",
+      "Practice simulator workflows, portfolio rules, and process checks that professionals use before risking a cent of real capital.",
     outcomes: [
       "Journal simulated trades with feedback.",
       "Measure skill with repeatable metrics.",
