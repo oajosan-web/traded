@@ -6,11 +6,11 @@ import React, { useState, useEffect, useRef } from "react";
    ============================================================ */
 
 const T = {
-  bg: "#F4EBDC", bgAlt: "#EDE2CE", card: "#ECE0C8", line: "#DFD4BE",
+  bg: "#F8F5EC", bgAlt: "#EFE9DA", card: "#EDE4D0", line: "#DBD1B6",
   ink: "#1A1A1A", grey: "#6B5F4E", greyLight: "#8E8369",
   gold: "#B8860B", goldSoft: "#F2E8B0", goldDeep: "#8B6023",
   burgundy: "#7A2E2E", burgundySoft: "#E8D5CF",
-  terracotta: "#C96E42", terracottaSoft: "#F0D8C6",
+  terracotta: "#6B2929", terracottaSoft: "#F0D8C6",
   emerald: "#1D2E28", emeraldSoft: "#D5DCD1", emeraldMid: "#2F4A40",
   green: "#1D2E28", greenSoft: "#D5DCD1",
 };

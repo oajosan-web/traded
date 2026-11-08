@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@400;500;700&display=swap');
 
 :root {
   color-scheme: light;
   color: #1A1A1A;
-  background: #F4EBDC;
+  background: #F8F5EC;
   font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 16px;
   line-height: 1.75;
@@ -18,12 +18,12 @@ html, body, #root {
   min-height: 100%;
   margin: 0;
   padding: 0;
-  background: #F4EBDC;
+  background: #F8F5EC;
 }
 
 body {
   color: #1A1A1A;
-  background: #F4EBDC;
+  background: #F8F5EC;
 }
 
 button,
@@ -65,8 +65,8 @@ img {
 }
 
 .navbar.solid {
-  background: #F4EBDC;
-  border-bottom: 1px solid #DFD4BE;
+  background: #F8F5EC;
+  border-bottom: 1px solid #DBD1B6;
   backdrop-filter: blur(10px);
 }
 
@@ -113,7 +113,7 @@ img {
 .hero-section {
   min-height: 100vh;
   padding: 120px 24px;
-  background: #F4EBDC;
+  background: #F8F5EC;
   display: grid;
   place-items: center;
 }
@@ -132,13 +132,19 @@ img {
 }
 
 .hero-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(52px, 7vw, 80px);
-  line-height: 0.98;
-  font-weight: 300;
-  letter-spacing: -0.02em;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: clamp(56px, 7.5vw, 92px);
+  line-height: 0.96;
+  font-weight: 500;
+  letter-spacing: -0.03em;
   margin: 0;
-  max-width: 680px;
+  max-width: 720px;
+  color: #141414;
+}
+
+.hero-title em {
+  font-style: normal;
+  font-weight: 500;
 }
 
 .hero-text {
@@ -185,7 +191,7 @@ img {
 
 .btn-solid {
   border: 1px solid #1D2E28;
-  color: #F4EBDC;
+  color: #F8F5EC;
   background: #1D2E28;
 }
 
@@ -196,7 +202,7 @@ img {
   border: 1px solid #1D2E28;
   padding: 28px;
   border-radius: 4px;
-  color: #F4EBDC;
+  color: #F8F5EC;
 }
 
 .hero-chart .hero-chart-labels {
@@ -204,7 +210,7 @@ img {
 }
 
 .hero-chart .chart-path {
-  stroke: #F4EBDC !important;
+  stroke: #F8F5EC !important;
 }
 
 .hero-chart-labels {
@@ -254,8 +260,8 @@ img {
 }
 
 .surface-card {
-  background: #EDE2CE;
-  border: 1px solid #DFD4BE;
+  background: #EFE9DA;
+  border: 1px solid #DBD1B6;
   border-radius: 4px;
   padding: 32px;
 }
@@ -323,7 +329,7 @@ img {
 .hero-stage-card {
   position: absolute;
   background: #ECE0C8;
-  border: 1px solid #DFD4BE;
+  border: 1px solid #DBD1B6;
   border-radius: 6px;
   padding: 22px;
   box-shadow: 0 24px 56px -20px rgba(80, 50, 20, 0.18),
@@ -339,7 +345,7 @@ img {
   top: 20px; left: 10px;
   transform: rotate(-6deg);
   background: #1D2E28;
-  color: #F4EBDC;
+  color: #F8F5EC;
   border-color: #1D2E28;
 }
 
@@ -351,9 +357,9 @@ img {
 .hero-stage-card.card-c {
   bottom: 20px; left: 80px;
   transform: rotate(-2deg);
-  background: #C96E42;
-  color: #F4EBDC;
-  border-color: #C96E42;
+  background: #6B2929;
+  color: #F8F5EC;
+  border-color: #6B2929;
 }
 
 @media (max-width: 900px) {
